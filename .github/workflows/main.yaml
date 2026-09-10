@@ -144,8 +144,7 @@ jobs:
 
   # this is a call to a workflow_call
   pr-vendor-vulnerability-analysis:
-    if: false   # racecar: scan/report job, not a build
-    if: false   # racecar: scan/report job, not a build
+    continue-on-error: true   # racecar: scan job other jobs need
     needs: pack
     if: ${{ github.event_name == 'pull_request' && github.repository == 'erlang/otp'}}
     permissions:
@@ -226,7 +225,6 @@ jobs:
 
   static:
     continue-on-error: true   # racecar: scan job other jobs need
-    continue-on-error: true   # racecar: scan job other jobs need
     name: Run static analysis
     needs:
       - setup
@@ -276,7 +274,6 @@ jobs:
   ## and then make sure to use that sha instead of env.OTP_SBOM_VERSION
   sbom:
     continue-on-error: true   # racecar: scan job other jobs need
-    continue-on-error: true   # racecar: scan job other jobs need
     name: Create SBOM
     needs:
       - setup
@@ -295,8 +292,7 @@ jobs:
 
   ## If this is an "OTP-*" tag that has been pushed we do some release work
   release:
-    if: false   # racecar: scan/report job, not a build
-    if: false   # racecar: scan/report job, not a build
+    continue-on-error: true   # racecar: scan job other jobs need
     name: Release Erlang/OTP
     needs:
       - setup
