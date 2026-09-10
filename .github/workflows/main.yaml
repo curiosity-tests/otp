@@ -99,6 +99,7 @@ jobs:
       bypass_erlang_repo:   false
 
   build-macos:
+    continue-on-error: true   # racecar: non-Linux reusable workflow, but needed
     name: Build Erlang/OTP (macOS)
     needs: pack
     permissions:
@@ -110,6 +111,7 @@ jobs:
       base_branch: ${{ needs.pack.outputs.base_branch }}
 
   build-ios:
+    continue-on-error: true   # racecar: non-Linux reusable workflow, but needed
     name: Build Erlang/OTP (iOS)
     needs: pack
     if: needs.pack.outputs.build-c-code == 'true'
@@ -121,6 +123,7 @@ jobs:
       base_branch: ${{ needs.pack.outputs.base_branch }}
 
   build-windows:
+    continue-on-error: true   # racecar: non-Linux reusable workflow, but needed
     name: Build Erlang/OTP (Windows)
     needs: pack
     if: needs.pack.outputs.build-c-code == 'true' || (github.event_name == 'push' && github.repository == 'erlang/otp')
