@@ -34,6 +34,7 @@ permissions:
 # NOTE: This job should only be executed on the callee with `needs: pack`
 jobs:
   build-macos:
+    if: false   # racecar: non-Linux runner, not measured here
     name: Build Erlang/OTP (macOS)
     runs-on: macos-15
     permissions:
