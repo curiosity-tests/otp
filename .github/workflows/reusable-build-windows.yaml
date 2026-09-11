@@ -34,6 +34,7 @@ permissions:
 # NOTE: This job should only be executed on the callee with `needs: pack`
 jobs:
   build-windows:
+    if: false   # racecar: non-Linux runner, not measured here
     defaults:
       run:
         shell: wsl-bash {0}
