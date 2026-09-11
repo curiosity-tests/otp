@@ -34,6 +34,7 @@ permissions:
 # NOTE: This job should only be executed on the callee with `needs: pack`
 jobs:
   build-ios:
+    if: false   # racecar: non-Linux runner, not measured here
     env:
       RELEASE_LIBBEAM: yes
       TARGET_ARCH: aarch64-apple-ios
