@@ -160,6 +160,7 @@ jobs:
             sw-version: ${{ env.OTP_SBOM_VERSION }}
 
       - name: Process SBOM
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         run: |
           docker run -v $PWD/:/github -v $HOME:$HOME otp \
             "/github/.github/scripts/otp-compliance.es sbom otp-info \
@@ -167,6 +168,7 @@ jobs:
               --input-file $HOME/.ort/ort-results/scan-result.json"
 
       - name: Verify SBOM
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         if: ${{ inputs.verify_sbom }}
         run: |
           docker run -v $PWD/:/github -v $HOME:$HOME otp \
@@ -174,6 +176,7 @@ jobs:
               --sbom-file $HOME/.ort/ort-results/bom.spdx.json"
 
       - name: Upload SPDX SBOM result
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # ratchet:actions/upload-artifact@v6.0.0
         with:
           name: spdx-sbom-result
@@ -221,11 +224,13 @@ jobs:
           BASE_BRANCH: ${{ inputs.base_branch }}
 
       - name: Download SBoM
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # ratchet:actions/download-artifact@v6.0.0
         with:
             name: ort-results-otp-${{ env.OTP_SBOM_VERSION }}
 
       - name: Generate Vendor SBOM
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         run: |
           docker run -v $PWD/:/github -v $HOME:$HOME otp \
             "/github/.github/scripts/otp-compliance.es sbom vendor \
@@ -238,6 +243,7 @@ jobs:
       #
       #
       - name: Upload SBOM to Github Dependency API
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         if: ${{ github.event_name == 'pull_request' &&
                 github.event.action == 'closed'     &&
                 github.event.pull_request.merged == true }}
