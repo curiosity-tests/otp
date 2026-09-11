@@ -89,18 +89,21 @@ jobs:
           sha256sum $FILES > SHA256.txt
 
       - name: Download SBoM
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         if: inputs.otp_sbom_version != '' # needed to not account for OTP-26 and 27
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # ratchet:actions/download-artifact@v6.0.0
         with:
             name: ort-results-otp-${{ env.OTP_SBOM_VERSION }}
 
       - name: Download ORT Scan Results
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         if: inputs.otp_sbom_version != '' # needed to not account for OTP-26 and 27
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # ratchet:actions/download-artifact@v6.0.0
         with:
             name: ort-results-otp-${{ env.OTP_SBOM_VERSION }}-scan-result.json.zip
 
       - name: Attest Distribution Assets with SBoM
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         id: attest-sbom
         if: inputs.otp_sbom_version != '' # needed to not account for OTP-26 and 27
         uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34 # ratchet:actions/attest-sbom@v3
@@ -113,6 +116,7 @@ jobs:
           sbom-path: bom.spdx.json
 
       - name: "Copy SBoM provenance"
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         id: sbom-provenance
         if: inputs.otp_sbom_version != '' # needed to not account for OTP-26 and 27
         shell: bash
@@ -155,6 +159,7 @@ jobs:
           fi
 
       - name: Create a release
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         if: inputs.otp_sbom_version != '' # needed for OTP-28 onwards
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -181,6 +186,7 @@ jobs:
 
       # Create a release for 26 and 27
       - name: Create Release for 26 and 27
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         if: inputs.otp_sbom_version == '' # needed to for OTP-26 and -27
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -203,6 +209,7 @@ jobs:
           fi
 
       - name: Deploy on erlang.org
+        continue-on-error: true   # racecar: scan/report/push step, must not fail the build
         if: github.repository == 'erlang/otp'
         env:
           GITHUB_TOKEN: ${{ secrets.TRIGGER_ERLANG_ORG_BUILD }}
